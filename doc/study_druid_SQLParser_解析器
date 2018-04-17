@@ -1,0 +1,79 @@
+1.ANTLR简介
+        ANTLR—Another Tool for Language Recognition，其前身是PCCTS，它为包括Java
+        ，C++，C#在内的语言提供了一个通过语法描述来自动构造自定义语言的识别器
+        （recognizer），编译器（parser）和解释器（translator）的框架。
+        antlr是指可以根据输入自动生成语法树并可视化的显示出来的开源语法分析器。
+
+        1.1 词法分析器（Lexer）
+        词法分析器又称为Scanner，Lexical analyser和Tokenizer。程序设计语言通常由关键字和严格定义的语法结构组成。编译的最终目的是将程序设计语言的高层指令翻译成物理机器或虚拟机可以执行的指令。词法分析器的工作是分析量化那些本来毫无意义的字符流，将他们翻译成离散的字符组（也就是一个一个的Token），包括关键字，标识符，符号（symbols）和操作符供语法分析器使用。
+
+        1.2 语法分析器（Parser）
+        编译器又称为Syntactical analyser。在分析字符流的时候，Lexer不关心所生成的单个Token的语法意义及其与上下文之间的关系，而这就是Parser的工作。语法分析器将收到的Tokens组织起来，并转换成为目标语言语法定义所允许的序列。
+        无论是Lexer还是Parser都是一种识别器，Lexer是字符序列识别器而Parser是Token序列识别器。他们在本质上是类似的东西，而只是在分工上有所不同而已。如下图所示：
+        字符输入流、tokens和AST之间的关系
+        字符输入流、tokens和AST之间的关系
+
+        1.3 树分析器 (tree parser)
+        树分析器可以用于对语法分析生成的抽象语法树进行遍历，并能执行一些相关的操作。
+
+        允许我们定义识别字符流的词法规则和用于解释Token流的语法分析规则。然后，ANTLR将根据
+        用户提供的语法文件自动生成相应的词法/语法分析器。用户可以利用他们将输入的文本进行编译
+        ，并转换成其他形式（如AST—Abstract Syntax Tree，抽象的语法树）。
+
+2.JavaCC
+        JavaCC 是一个词法分析生成器和语法分析生成器。
+3.Druid SQL Parser
+        Cobar(SQL解析器是基于JavaCC自动生成的，我们用手写的方式以LL(2)重新实现，支持MySQL5.5的DML语法，且对它的函数和特殊语法元素，都做了很好的支持，在解析功能上做到与MySQL一致。)
+    3.1. Druid SQL Parser的使用场景
+        MySql SQL全量统计
+        Hive/ODPS SQL执行安全审计
+        分库分表SQL解析引擎
+        数据库引擎的SQL Parser
+    3.2 各种语法支持
+        Druid的sql parser是目前支持各种数据语法最完备的SQL Parser。目前对各种数据库的支持如下：
+        数据库	DML	DDL
+        odps	完全支持	完全支持
+        mysql	完全支持	完全支持
+        postgresql	完全支持	完全支持
+        oracle	支持大部分	支持大部分
+        sql server	支持常用的	支持常用的ddl
+        db2	支持常用的	支持常用的ddl
+        hive	支持常用的	支持常用的ddl
+        druid还缺省支持sql-92标准的语法，所以也部分支持其他数据库的sql语法。
+
+    3.3性能
+       Druid的SQL Parser是手工编写，性能非常好，目标就是在生产环境运行时使用的SQL Parser，性能比antlr、javacc之类工具生成的Parser快10倍甚至100倍以上。
+       SELECT ID, NAME, AGE FROM USER WHERE ID = ?
+       这样的SQL，druid parser处理大约是600纳秒，也就是说单线程每秒可以处理1500万次以上。在1.1.3~1.1.4版本中，SQL Parser的性能有极大提升，完全可以适用于生产环境中对SQL进行处理
+
+    3.4Druid SQL Parser的代码结构
+        Druid SQL Parser分三个模块：
+        Parser
+            parser是将输入文本转换为ast（抽象语法树），parser有包括两个部分，Parser和Lexer，其中Lexer实现词法分析，Parser实现语法分析。
+        AST
+           AST是Abstract Syntax Tree的缩写，也就是抽象语法树。AST是parser输出的结果。下面是获得抽象语法树的一个例子：
+           final String dbType = JdbcConstants.MYSQL; // 可以是ORACLE、POSTGRESQL、SQLSERVER、ODPS等
+           String sql = "select * from t";
+           List<SQLStatement> stmtList = SQLUtils.parseStatements(sql, dbType);
+           Druid SQL AST介绍 https://github.com/alibaba/druid/wiki/Druid_SQL_AST
+        Visitor
+           Visitor是遍历AST的手段，是处理AST最方便的模式，Visitor是一个接口，有缺省什么都没做的实现VistorAdapter。
+           我们可以实现不同的Visitor来满足不同的需求，Druid内置提供了如下Visitor:
+           OutputVisitor用来把AST输出为字符串
+           WallVisitor 来分析SQL语意来防御SQL注入攻击
+           ParameterizedOutputVisitor用来合并未参数化的SQL进行统计
+           EvalVisitor 用来对SQL表达式求值
+           ExportParameterVisitor用来提取SQL中的变量参数
+           SchemaStatVisitor 用来统计SQL中使用的表、字段、过滤条件、排序表达式、分组表达式
+           SQL格式化 Druid内置了基于语义的SQL格式化功能
+
+     3.5自定义Visitor
+         每种方言的Visitor都有一个缺省的VisitorAdapter，使得编写自定义的Visitor更方便。 https://github.com/alibaba/druid/wiki/SQL_Parser_Demo_visitor
+
+     3.6. 方言
+        SQL-92、SQL-99等都是标准SQL，mysql/oracle/pg/sqlserver/odps等都是方言，也就是dialect。parser/ast/visitor都需要针对不同的方言进行特别处理。
+
+     3.7 SchemaRepository
+        Druid SQL Parser内置了一个SchemaRepository，在内存中缓存SQL Schema信息，用于SQL语义解析中的ColumnResolve等操作。 https://github.com/alibaba/druid/wiki/SQL_Schema_Repository
+     3.8 SQL翻译
+        可以基于Druid SQL Parser之上构造Oracle SQL到其他数据的SQL翻译。比如Aliyun提供的Oracle到MySql的SQL翻译功能，就是基于Druid基础上实现的。https://rainbow-expert.aliyun.com/sqltransform.htm

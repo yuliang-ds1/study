@@ -1,0 +1,207 @@
+  AST
+   AST是Abstract Syntax Tree的缩写，也就是抽象语法树。AST是parser输出的结果。下面是获得抽象语法树的一个例子：
+   final String dbType = JdbcConstants.MYSQL; // 可以是ORACLE、POSTGRESQL、SQLSERVER、ODPS等
+   String sql = "select * from t";
+   List<SQLStatement> stmtList = SQLUtils.parseStatements(sql, dbType);
+   Druid SQL AST介绍 https://github.com/alibaba/druid/wiki/Druid_SQL_AST
+
+ 1.在Druid SQL Parser中有哪些AST节点类型
+     在Druid中，AST节点类型主要包括SQLObject、SQLExpr、SQLStatement三种抽象类型。
+     package com.alibaba.druid.sql.ast;
+     interface SQLObject {}
+     interface SQLExpr extends SQLObject {}
+     interface SQLStatement extends SQLObject {}
+
+     interface SQLTableSource extends SQLObject {}
+     class SQLSelect extends SQLObject {}
+     class SQLSelectQueryBlock extends SQLObject {}
+
+   1.1.常用的SQLExpr有哪些
+   package com.alibaba.druid.sql.ast.expr;
+
+   // SQLName是一种的SQLExpr的Expr，包括SQLIdentifierExpr、SQLPropertyExpr等
+   public interface SQLName extends SQLExpr {}
+
+   // 例如 ID = 3 这里的ID是一个SQLIdentifierExpr
+   class SQLIdentifierExpr implements SQLExpr, SQLName {
+       String name;
+   }
+
+   // 例如 A.ID = 3 这里的A.ID是一个SQLPropertyExpr
+   class SQLPropertyExpr implements SQLExpr, SQLName {
+       SQLExpr owner;
+       String name;
+   }
+
+   // 例如 ID = 3 这是一个SQLBinaryOpExpr
+   // left是ID (SQLIdentifierExpr)
+   // right是3 (SQLIntegerExpr)
+   class SQLBinaryOpExpr implements SQLExpr {
+       SQLExpr left;
+       SQLExpr right;
+       SQLBinaryOperator operator;
+   }
+
+   // 例如 select * from where id = ?，这里的?是一个SQLVariantRefExpr，name是'?'
+   class SQLVariantRefExpr extends SQLExprImpl {
+       String name;
+   }
+
+   // 例如 ID = 3 这里的3是一个SQLIntegerExpr
+   public class SQLIntegerExpr extends SQLNumericLiteralExpr implements SQLValuableExpr {
+       Number number;
+
+       // 所有实现了SQLValuableExpr接口的SQLExpr都可以直接调用这个方法求值
+       @Override
+       public Object getValue() {
+           return this.number;
+       }
+   }
+
+   // 例如 NAME = 'jobs' 这里的'jobs'是一个SQLCharExpr
+   public class SQLCharExpr extends SQLTextLiteralExpr implements SQLValuableExpr{
+       String text;
+   }
+
+   1.2. 常用的SQLStatemment
+     最常用的Statement当然是SELECT/UPDATE/DELETE/INSERT，他们分别是
+
+     package com.alibaba.druid.sql.ast.statement;
+
+     class SQLSelectStatement implements SQLStatement {
+         SQLSelect select;
+     }
+     class SQLUpdateStatement implements SQLStatement {
+         SQLExprTableSource tableSource;
+          List<SQLUpdateSetItem> items;
+          SQLExpr where;
+     }
+     class SQLDeleteStatement implements SQLStatement {
+         SQLTableSource tableSource;
+         SQLExpr where;
+     }
+     class SQLInsertStatement implements SQLStatement {
+         SQLExprTableSource tableSource;
+         List<SQLExpr> columns;
+         SQLSelect query;
+     }
+
+  1.3 SQLTableSource
+      常见的SQLTableSource包括SQLExprTableSource、SQLJoinTableSource、SQLSubqueryTableSource、SQLWithSubqueryClause.Entry
+
+      class SQLTableSourceImpl extends SQLObjectImpl implements SQLTableSource {
+          String alias;
+      }
+
+      // 例如 select * from emp where i = 3，这里的from emp是一个SQLExprTableSource
+      // 其中expr是一个name=emp的SQLIdentifierExpr
+      class SQLExprTableSource extends SQLTableSourceImpl {
+          SQLExpr expr;
+      }
+
+      // 例如 select * from emp e inner join org o on e.org_id = o.id
+      // 其中left 'emp e' 是一个SQLExprTableSource，right 'org o'也是一个SQLExprTableSource
+      // condition 'e.org_id = o.id'是一个SQLBinaryOpExpr
+      class SQLJoinTableSource extends SQLTableSourceImpl {
+          SQLTableSource left;
+          SQLTableSource right;
+          JoinType joinType; // INNER_JOIN/CROSS_JOIN/LEFT_OUTER_JOIN/RIGHT_OUTER_JOIN/...
+          SQLExpr condition;
+      }
+
+      // 例如 select * from (select * from temp) a，这里第一层from(...)是一个SQLSubqueryTableSource
+      SQLSubqueryTableSource extends SQLTableSourceImpl {
+          SQLSelect select;
+      }
+
+      /*
+      例如
+      WITH RECURSIVE ancestors AS (
+          SELECT *
+          FROM org
+          UNION
+          SELECT f.*
+          FROM org f, ancestors a
+          WHERE f.id = a.parent_id
+      )
+      SELECT *
+      FROM ancestors;
+
+      这里的ancestors AS (...) 是一个SQLWithSubqueryClause.Entry
+      */
+      class SQLWithSubqueryClause {
+          static class Entry extends SQLTableSourceImpl {
+               SQLSelect subQuery;
+          }
+      }
+
+
+    1.4 SQLSelect & SQLSelectQuery
+    SQLSelectStatement包含一个SQLSelect，SQLSelect包含一个SQLSelectQuery，都是组成的关系。SQLSelectQuery有主要的两个派生类，分别是SQLSelectQueryBlock和SQLUnionQuery。
+
+    class SQLSelect extends SQLObjectImpl {
+        SQLWithSubqueryClause withSubQuery;
+        SQLSelectQuery query;
+    }
+
+    interface SQLSelectQuery extends SQLObject {}
+
+    class SQLSelectQueryBlock implements SQLSelectQuery {
+        List<SQLSelectItem> selectList;
+        SQLTableSource from;
+        SQLExprTableSource into;
+        SQLExpr where;
+        SQLSelectGroupByClause groupBy;
+        SQLOrderBy orderBy;
+        SQLLimit limit;
+    }
+
+    class SQLUnionQuery implements SQLSelectQuery {
+        SQLSelectQuery left;
+        SQLSelectQuery right;
+        SQLUnionOperator operator; // UNION/UNION_ALL/MINUS/INTERSECT
+    }
+
+
+    1.5.SQLCreateTableStatement
+    建表语句包含了一系列方法，用于方便各种操作
+
+    public class SQLCreateTableStatement extends SQLStatementImpl implements SQLDDLStatement, SQLCreateStatement {
+        SQLExprTableSource tableSource;
+        List<SQLTableElement> tableElementList;
+        Select select;
+
+        // 忽略大小写的查找SQLCreateTableStatement中的SQLColumnDefinition
+        public SQLColumnDefinition findColumn(String columName) {}
+
+        // 忽略大小写的查找SQLCreateTableStatement中的column关联的索引
+        public SQLTableElement findIndex(String columnName) {}
+
+        // 是否外键依赖另外一个表
+        public boolean isReferenced(String tableName) {}
+    }
+
+  2.怎样产生AST
+  1. 通过SQLUtils产生List<SQLStatement>
+  import com.alibaba.druid.util.JdbcConstants;
+  String dbType = JdbcConstants.MYSQL;
+  List<SQLStatement> statementList = SQLUtils.parseStatements(sql, dbType);
+
+  2.通过SQLUtils产生SQLExpr
+  String dbType = JdbcConstants.MYSQL;
+  SQLExpr expr = SQLUtils.toSQLExpr("id=3", dbType);
+
+  3.怎样打印AST节点
+  通过SQLUtils工具类打印节点
+
+  package com.alibaba.druid.sql;
+
+  public class SQLUtils {
+      // 可以将SQLExpr/SQLStatement打印为String类型
+      static String toSQLString(SQLObject sqlObj, String dbType);
+
+      // 可以将一个&lt;SQLStatement&gt;打印为String类型
+      static String toSQLString(List<SQLStatement> statementList, String dbType);
+
+  4.如何自定义遍历AST节点
+  所有的AST节点都支持Visitor模式，需要自定义遍历逻辑，可以实现相应的ASTVisitorAdapter派生类，比如 https://github.com/alibaba/druid/wiki/SQL_Parser_Demo_visitors
