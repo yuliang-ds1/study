@@ -7,7 +7,7 @@ package com.alachao.study.thread.volatileThread;
  */
 public class Myservice {
 
-    public volatile boolean  flag=true;
+    public  boolean  flag=true;
 
     public void  runMethod(){
         while(flag){
