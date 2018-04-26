@@ -21,7 +21,7 @@ public class MyInstantiationAwareBeanPostProcessor extends InstantiationAwareBea
     // 接口方法、实例化Bean之前调用
     @Override
     public Object postProcessBeforeInstantiation(Class beanClass, String beanName) throws BeansException {
-        System.out.println("InstantiationAwareBeanPostProcessor调用postProcessBeforeInstantiation方法beanName"+beanName);
+        System.out.println("InstantiationAwareBeanPostProcessor 调用postProcessBeforeInstantiation方法 beanName:"+beanName);
         return null;
     }
 
@@ -30,17 +30,15 @@ public class MyInstantiationAwareBeanPostProcessor extends InstantiationAwareBea
     @Override
     public boolean  postProcessAfterInstantiation(Object bean, String beanName)
             throws BeansException {
-        System.out.println("InstantiationAwareBeanPostProcessor调用postProcessAfterInstantiation方法");
-        System.out.println("InstantiationAwareBeanPostProcessor调用postProcessAfterInstantiation方法 beanName"+beanName);
+        System.out.println("InstantiationAwareBeanPostProcessor 调用postProcessAfterInstantiation方法 beanName: "+beanName+" bean:"+bean);
 
-        return false;
+        return true;
     }
 
     // 接口方法、实例化Bean之后调用
     @Override
     public Object postProcessAfterInitialization(Object bean, String beanName)
             throws BeansException {
-        System.out.println("InstantiationAwareBeanPostProcessor调用postProcessAfterInitialization方法");
         System.out.println("InstantiationAwareBeanPostProcessor调用postProcessAfterInitialization方法 beanName"+beanName);
 
         return bean;
@@ -52,9 +50,8 @@ public class MyInstantiationAwareBeanPostProcessor extends InstantiationAwareBea
                                                     PropertyDescriptor[] pds,
                                                     Object bean, String beanName) throws BeansException {
         System.out.println("InstantiationAwareBeanPostProcessor调用postProcessPropertyValues方法");
-        System.out.println("InstantiationAwareBeanPostProcessor调用postProcessPropertyValues方法 bean"+beanName);
-        System.out.println("InstantiationAwareBeanPostProcessor调用postProcessPropertyValues方法 pvs"+pvs);
-
+        System.out.println("InstantiationAwareBeanPostProcessor调用postProcessPropertyValues方法 bean:"+beanName);
+        System.out.println("InstantiationAwareBeanPostProcessor调用postProcessPropertyValues方法 pvs:"+pvs);
 
         return pvs;
     }

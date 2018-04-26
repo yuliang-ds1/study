@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
  * @Date 10:05  2018/4/20.
  * @Desciption
  */
-@Component
+//@Component
 public class PersonWomen implements BeanFactoryAware, BeanNameAware,
         InitializingBean, DisposableBean {
 

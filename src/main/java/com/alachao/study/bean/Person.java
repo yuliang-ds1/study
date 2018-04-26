@@ -109,6 +109,7 @@ public class Person implements BeanFactoryAware, BeanNameAware,
     // 通过<bean>的destroy-method属性指定的初始化方法
     public void myDestory() {
         System.out.println("【destroy-method】调用<bean>的destroy-method属性指定的初始化方法");
+
     }
 
     @Override
