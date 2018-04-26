@@ -17,9 +17,9 @@
     <bean id="test" class="com.alachao.study.aop.TestBean"></bean>
     <bean class="com.alachao.study.aop.AspectJTest"></bean>
 
-    <myname:user id="testBean"  userName="xi" email="yu" />
+    <!--<myname:user id="testBean"  userName="xi" email="yu" />-->
 
-    <bean id="beanPostProcessor" class="com.alachao.study.bean.MyBeanPostProcessor">
+   <!-- <bean id="beanPostProcessor" class="com.alachao.study.bean.MyBeanPostProcessor">
     </bean>
 
     <bean id="instantiationAwareBeanPostProcessor" class="com.alachao.study.bean.MyInstantiationAwareBeanPostProcessor">
@@ -30,7 +30,7 @@
 
    <bean id="person" class="com.alachao.study.bean.Person" init-method="myInit"
           destroy-method="myDestory" scope="singleton" p:name="张三" p:address="广州"
-          />
+          />-->
 
 
 
