@@ -20,7 +20,8 @@
 
     <context:property-placeholder location="classpath:db_server.properties"/>
 
-    <bean id="testBean" p:initialSize="${driverClassName}"  class="com.alachao.study.aop.TestBean">
+    <bean id="testBean" p:initialSize="${driverClassName}"   autowire="byName" class="com.alachao.study.aop.TestBean">
+        <property name="personWomen" ref="personWomen"></property>
     </bean>
     <bean class="com.alachao.study.aop.AspectJTest"/>
     <bean id="beanFactoryPostProcessor" class="com.alachao.study.bean.MyBeanFactoryPostProcessor"/>

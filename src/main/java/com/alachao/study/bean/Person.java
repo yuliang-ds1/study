@@ -17,7 +17,7 @@ import org.springframework.beans.factory.InitializingBean;
  * @Date 10:05  2018/4/20.
  * @Desciption
  */
-//@Component
+@Component
 public class Person implements BeanFactoryAware, BeanNameAware,
         InitializingBean, DisposableBean {
 

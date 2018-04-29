@@ -2,6 +2,7 @@ package com.alachao.study.aop;
 
 import com.alachao.study.bean.Cao;
 import com.alachao.study.bean.Person;
+import com.alachao.study.bean.PersonWomen;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +31,8 @@ public class TestBean   implements BeanFactoryAware, BeanNameAware,
 
     @Resource
     private Person person;
+
+    private PersonWomen  personWomen;
 
     public TestBean(){
         System.out.println("TestBean 【构造器】调用TestBean的构造器实例化");
@@ -118,6 +121,38 @@ public class TestBean   implements BeanFactoryAware, BeanNameAware,
 
     }
 
+    public Cao getCao() {
+        return cao;
+    }
+
+    public void setCao(Cao cao) {
+        this.cao = cao;
+    }
+
+    public Person getPerson() {
+        return person;
+    }
+
+    public void setPerson(Person person) {
+        this.person = person;
+    }
+
+    public PersonWomen getPersonWomen() {
+        return personWomen;
+    }
+
+    public void setPersonWomen(PersonWomen personWomen) {
+        this.personWomen = personWomen;
+    }
+
+    public BeanFactory getBeanFactory() {
+        return beanFactory;
+    }
+
+    public String getBeanName() {
+        return beanName;
+    }
+
     @Override
     public String toString() {
         return "TestBean{" +
@@ -125,6 +160,7 @@ public class TestBean   implements BeanFactoryAware, BeanNameAware,
                 ", maxActive='" + maxActive + '\'' +
                 ", cao=" + cao +
                 ", person=" + person +
+                ", personWomen=" + personWomen +
                 ", testStr='" + testStr + '\'' +
                 ", beanFactory=" + beanFactory +
                 ", beanName='" + beanName + '\'' +
