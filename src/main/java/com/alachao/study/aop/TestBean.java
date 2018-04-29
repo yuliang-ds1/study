@@ -1,9 +1,15 @@
 package com.alachao.study.aop;
 
+import com.alachao.study.bean.Cao;
+import com.alachao.study.bean.Person;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import javax.annotation.Resource;
 
 /**
  * @Author yuliang-ds1
@@ -12,6 +18,18 @@ import javax.annotation.PostConstruct;
  */
 public class TestBean   implements BeanFactoryAware, BeanNameAware,
         InitializingBean, DisposableBean {
+
+    @Value("${initialSize}")
+    private String initialSize;
+
+    @Value("${maxActive}")
+    private String maxActive;
+
+    @Autowired
+    private Cao cao;
+
+    @Resource
+    private Person person;
 
     public TestBean(){
         System.out.println("TestBean 【构造器】调用TestBean的构造器实例化");
@@ -31,12 +49,26 @@ public class TestBean   implements BeanFactoryAware, BeanNameAware,
         System.out.println("test代理");
     }
 
-   public String toString(){
-        return "testStr="+testStr;
-   }
+
+    public String getInitialSize() {
+        return initialSize;
+    }
+
+    public void setInitialSize(String initialSize) {
+        this.initialSize = initialSize;
+    }
+
+    public String getMaxActive() {
+        return maxActive;
+    }
+
+    public void setMaxActive(String maxActive) {
+        this.maxActive = maxActive;
+    }
 
     private BeanFactory beanFactory;
     private String beanName;
+
 
     // 这是BeanFactoryAware接口方法
     @Override
@@ -86,4 +118,16 @@ public class TestBean   implements BeanFactoryAware, BeanNameAware,
 
     }
 
+    @Override
+    public String toString() {
+        return "TestBean{" +
+                "initialSize='" + initialSize + '\'' +
+                ", maxActive='" + maxActive + '\'' +
+                ", cao=" + cao +
+                ", person=" + person +
+                ", testStr='" + testStr + '\'' +
+                ", beanFactory=" + beanFactory +
+                ", beanName='" + beanName + '\'' +
+                '}';
+    }
 }

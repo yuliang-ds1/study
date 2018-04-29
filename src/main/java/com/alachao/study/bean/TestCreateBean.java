@@ -24,8 +24,9 @@ public class TestCreateBean {
         System.out.println("结束获取bean");*/
 
         //执行代理方法
-        TestBean test = (TestBean)factory.getBean("test");
+        TestBean test = (TestBean)factory.getBean("testBean");
         test.test();
+        System.out.println(test.toString());
         //System.out.println(TestBean);
 
 

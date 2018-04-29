@@ -24,13 +24,13 @@ public class MyBeanFactoryPostProcessor implements BeanFactoryPostProcessor {
     @Override
     public void postProcessBeanFactory(ConfigurableListableBeanFactory arg0)throws BeansException {
         System.out.println("BeanFactoryPostProcessor调用postProcessBeanFactory方法");
-        BeanDefinition bd = arg0.getBeanDefinition("person");
+        BeanDefinition bd = arg0.getBeanDefinition("testBean");
         MutablePropertyValues list=bd.getPropertyValues();
         List<PropertyValue> l=list.getPropertyValueList();
         for (org.springframework.beans.PropertyValue p:l) {
-            System.out.println("MyBeanFactoryPostProcessor 打印："+p.toString());
+            System.out.println("MyBeanFactoryPostProcessor 打印："+p.getName()+"  value: "+p.getValue());
         }
-        bd.getPropertyValues().addPropertyValue("phone", "110");
+       // bd.getPropertyValues().addPropertyValue("phone", "110");
     }
 
 }
