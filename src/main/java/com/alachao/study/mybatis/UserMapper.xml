@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.alachao.study.mybatis.UserMapper">
+
+    <!-- 通用查询映射结果 -->
+   <!-- <resultMap id="BaseResultMap" type="com.gomeplus.meipro.meeting.domain.MeetingDevice">
+        <id column="id" property="id" />
+        <result column="companyId_Id" property="companyId" />
+        <result column="name" property="name" />
+        <result column="SHORT_NAME" property="shortName" />
+        <result column="pinyin" property="pinyin" />
+        <result column="py" property="py" />
+        <result column="ORDERNUM" property="order" />
+        <result column="status" property="status" />
+        <result column="remark" property="remark" />
+        <result column="owner_id" property="ownerId" />
+        <result column="ctime" property="ctime" />
+        <result column="utime" property="utime" />
+    </resultMap>-->
+
+
+    <insert id="insertUser" keyProperty="id" useGeneratedKeys="true" parameterType="User">
+        insert into user( name,age) values(#{name}, #{age})
+    </insert>
+
+    <select id="getUser"   resultType="User"  parameterType="java.lang.Integer" >
+      select * from User where id=#{id}
+    </select>
+
+</mapper>
