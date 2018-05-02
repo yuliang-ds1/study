@@ -3,9 +3,14 @@ package com.alachao.study.mybatis;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 
 public class TestUserMapper {
 
+    public TestUserMapper(){
+
+        System.out.print("init 构造");
+    }
 
     private static SqlSessionFactory sqlSessionFactory;
     static{
@@ -38,4 +43,9 @@ public class TestUserMapper {
             sqlSession.close();
         }
     }
+
+
+
+
+
 }

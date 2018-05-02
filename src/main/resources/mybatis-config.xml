@@ -37,8 +37,8 @@
                 <property name="password" value="${password}"/>-->
                 <property name="driver" value="com.mysql.jdbc.Driver"/>
                 <property name="url" value="jdbc:mysql://localhost/lexueba"/>
-                <property name="username" value="root"/>
-                <property name="password" value="123456"/>
+                <property name="username" value="lex"/>
+                <property name="password" value="lex"/>
             </dataSource>
         </environment>
     </environments>
