@@ -53,10 +53,21 @@ JDK1.8 1.9新特性  20%
 
 3.研究开源框架原理和机制
 Spring  30%
+        xml加载
+	bean创建
+	beanFactory加载,扩展
+	aop
+	事务管理
+	springmvc
+	mybatis
+	jdbc
 MyBatis 20%
 struts  20%
 Shiro   30%
 Druid   30%
+        sql解析
+	责任链模式
+	连接池
 Apollo  20%
 
 
