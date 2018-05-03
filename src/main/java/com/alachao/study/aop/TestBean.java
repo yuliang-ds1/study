@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import javax.annotation.Resource;
 
 /**
@@ -116,8 +117,14 @@ public class TestBean   implements BeanFactoryAware, BeanNameAware,
     }
 
     // 通过<bean>的destroy-method属性指定的初始化方法
+
     public void myDestory() {
-        System.out.println("TestBean【destroy-method】调用<bean>的destroy-method属性指定的初始化方法");
+        System.out.println("TestBean【destroy-method】调用<bean>的destroy-method方法");
+
+    }
+    @PreDestroy
+    public void PreDestroy() {
+        System.out.println("TestBean【PreDestroy】调用<bean>的PreDestroy方法");
 
     }
 
