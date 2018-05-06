@@ -14,6 +14,8 @@
 
 
     <bean id="dataSource"  class="org.apache.commons.dbcp.BasicDataSource">
+   <!-- <bean id="dataSource"  class=" com.alibaba.druid.pool.DruidDataSource">-->
+
         <property name="driverClassName" value="com.mysql.jdbc.Driver" />
         <property name="url" value="jdbc:mysql://localhost/lexueba" />
         <property name="username" value="lex" />
