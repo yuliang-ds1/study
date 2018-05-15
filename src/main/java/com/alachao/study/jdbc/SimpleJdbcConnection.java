@@ -22,7 +22,8 @@ public class SimpleJdbcConnection {
         ResultSet rs=st.executeQuery("select * from t_product");
         //4.处理数据库的返回结果(使用ResultSet类)
         while(rs.next()){
-            System.out.println(rs.getString("name")+" "
+            System.out.println("name: "+
+                     rs.getString("name")+"  price: "
                     +rs.getString("price"));
         }
 

@@ -1,0 +1,340 @@
+
+1.动态代理内部实现
+
+首先来看看类Proxy的代码实现 Proxy的主要静态变量'
+// 映射表：用于维护类装载器对象到其对应的代理类缓存
+private static Map loaderToCache = new WeakHashMap();
+// 标记：用于标记一个动态代理类正在被创建中
+private static Object pendingGenerationMarker = new Object();
+// 同步表：记录已经被创建的动态代理类类型，主要被方法 isProxyClass 进行相关的判断
+private static Map proxyClasses = Collections.synchronizedMap(new WeakHashMap());
+// 关联的调用处理器引用
+protected InvocationHandler h;
+
+
+2.Proxy的构造方法
+// 由于 Proxy 内部从不直接调用构造函数，所以 private 类型意味着禁止任何调用
+private Proxy() {}
+
+
+// 由于 Proxy 内部从不直接调用构造函数，所以 protected 意味着只有子类可以调用
+protected Proxy(InvocationHandler h) {this.h = h;}
+
+
+
+3.Proxy静态方法newProxyInstance
+public static Object newProxyInstance(ClassLoader loader, Class<?>[]interfaces,InvocationHandler h) throws IllegalArgumentException {
+    // 检查 h 不为空，否则抛异常
+    if (h == null) {
+        throw new NullPointerException();
+    }
+
+    // 获得与指定类装载器和一组接口相关的代理类类型对象
+    Class cl = getProxyClass(loader, interfaces);
+
+    // 通过反射获取构造函数对象并生成代理类实例
+    try {
+        Constructor cons = cl.getConstructor(constructorParams);
+        return (Object) cons.newInstance(new Object[] { h });
+    } catch (NoSuchMethodException e) { throw new InternalError(e.toString());
+    } catch (IllegalAccessException e) { throw new InternalError(e.toString());
+    } catch (InstantiationException e) { throw new InternalError(e.toString());
+    } catch (InvocationTargetException e) { throw new InternalError(e.toString());
+    }
+}
+
+
+4.类Proxy的getProxyClass方法调用ProxyGenerator的 generateProxyClass方法产生ProxySubject.class的二进制数据：
+public static byte[] generateProxyClass(final String name, Class[] interfaces)
+
+5.我们可以import sun.misc.ProxyGenerator，调用 generateProxyClass方法产生binary data，然后写入文件，最后通过反编译工具来查看内部实现原理。 反编译后的ProxySubject.java Proxy静态方法newProxyInstance
+
+
+import java.lang.reflect.*;
+public final class ProxySubject extends Proxy
+    implements Subject
+{
+    private static Method m1;
+    private static Method m0;
+    private static Method m3;
+    private static Method m2;
+    public ProxySubject(InvocationHandler invocationhandler)
+    {
+        super(invocationhandler);
+    }
+    public final boolean equals(Object obj)
+    {
+        try
+        {
+            return ((Boolean)super.h.invoke(this, m1, new Object[] {
+                obj
+            })).booleanValue();
+        }
+        catch(Error _ex) { }
+        catch(Throwable throwable)
+        {
+            throw new UndeclaredThrowableException(throwable);
+        }
+    }
+    public final int hashCode()
+    {
+        try
+        {
+            return ((Integer)super.h.invoke(this, m0, null)).intValue();
+        }
+        catch(Error _ex) { }
+        catch(Throwable throwable)
+        {
+            throw new UndeclaredThrowableException(throwable);
+        }
+    }
+    public final void doSomething()
+    {
+        try
+        {
+            super.h.invoke(this, m3, null);
+            return;
+        }
+        catch(Error _ex) { }
+        catch(Throwable throwable)
+        {
+            throw new UndeclaredThrowableException(throwable);
+        }
+    }
+    public final String toString()
+    {
+        try
+        {
+            return (String)super.h.invoke(this, m2, null);
+        }
+        catch(Error _ex) { }
+        catch(Throwable throwable)
+        {
+            throw new UndeclaredThrowableException(throwable);
+        }
+    }
+    static
+    {
+        try
+        {
+            m1 = Class.forName("java.lang.Object").getMethod("equals", new Class[] {
+                Class.forName("java.lang.Object")
+            });
+            m0 = Class.forName("java.lang.Object").getMethod("hashCode", new Class[0]);
+            m3 = Class.forName("Subject").getMethod("doSomething", new Class[0]);
+            m2 = Class.forName("java.lang.Object").getMethod("toString", new Class[0]);
+        }
+        catch(NoSuchMethodException nosuchmethodexception)
+        {
+            throw new NoSuchMethodError(nosuchmethodexception.getMessage());
+        }
+        catch(ClassNotFoundException classnotfoundexception)
+        {
+            throw new NoClassDefFoundError(classnotfoundexception.getMessage());
+        }
+    }
+}
+
+ProxyGenerator内部是如何生成class二进制数据，可以参考源代码。
+
+private byte[] generateClassFile() {
+  /*
+   * Record that proxy methods are needed for the hashCode, equals,
+   * and toString methods of java.lang.Object.  This is done before
+   * the methods from the proxy interfaces so that the methods from
+   * java.lang.Object take precedence over duplicate methods in the
+   * proxy interfaces.
+   */
+  addProxyMethod(hashCodeMethod, Object.class);
+  addProxyMethod(equalsMethod, Object.class);
+  addProxyMethod(toStringMethod, Object.class);
+  /*
+   * Now record all of the methods from the proxy interfaces, giving
+   * earlier interfaces precedence over later ones with duplicate
+   * methods.
+   */
+  for (int i = 0; i < interfaces.length; i++) {
+      Method[] methods = interfaces[i].getMethods();
+      for (int j = 0; j < methods.length; j++) {
+    addProxyMethod(methods[j], interfaces[i]);
+      }
+  }
+  /*
+   * For each set of proxy methods with the same signature,
+   * verify that the methods' return types are compatible.
+   */
+  for (List<ProxyMethod> sigmethods : proxyMethods.values()) {
+      checkReturnTypes(sigmethods);
+  }
+  /* ============================================================
+   * Step 2: Assemble FieldInfo and MethodInfo structs for all of
+   * fields and methods in the class we are generating.
+   */
+  try {
+      methods.add(generateConstructor());
+      for (List<ProxyMethod> sigmethods : proxyMethods.values()) {
+    for (ProxyMethod pm : sigmethods) {
+        // add static field for method's Method object
+        fields.add(new FieldInfo(pm.methodFieldName,
+      "Ljava/lang/reflect/Method;",
+       ACC_PRIVATE | ACC_STATIC));
+        // generate code for proxy method and add it
+        methods.add(pm.generateMethod());
+    }
+      }
+      methods.add(generateStaticInitializer());
+  } catch (IOException e) {
+      throw new InternalError("unexpected I/O Exception");
+  }
+  /* ============================================================
+   * Step 3: Write the final class file.
+   */
+  /*
+   * Make sure that constant pool indexes are reserved for the
+   * following items before starting to write the final class file.
+   */
+  cp.getClass(dotToSlash(className));
+  cp.getClass(superclassName);
+  for (int i = 0; i < interfaces.length; i++) {
+      cp.getClass(dotToSlash(interfaces[i].getName()));
+  }
+  /*
+   * Disallow new constant pool additions beyond this point, since
+   * we are about to write the final constant pool table.
+   */
+  cp.setReadOnly();
+  ByteArrayOutputStream bout = new ByteArrayOutputStream();
+  DataOutputStream dout = new DataOutputStream(bout);
+  try {
+      /*
+       * Write all the items of the "ClassFile" structure.
+       * See JVMS section 4.1.
+       */
+          // u4 magic;
+      dout.writeInt(0xCAFEBABE);
+          // u2 minor_version;
+      dout.writeShort(CLASSFILE_MINOR_VERSION);
+          // u2 major_version;
+      dout.writeShort(CLASSFILE_MAJOR_VERSION);
+      cp.write(dout);   // (write constant pool)
+          // u2 access_flags;
+      dout.writeShort(ACC_PUBLIC | ACC_FINAL | ACC_SUPER);
+          // u2 this_class;
+      dout.writeShort(cp.getClass(dotToSlash(className)));
+          // u2 super_class;
+      dout.writeShort(cp.getClass(superclassName));
+          // u2 interfaces_count;
+      dout.writeShort(interfaces.length);
+          // u2 interfaces[interfaces_count];
+      for (int i = 0; i < interfaces.length; i++) {
+    dout.writeShort(cp.getClass(
+        dotToSlash(interfaces[i].getName())));
+      }
+          // u2 fields_count;
+      dout.writeShort(fields.size());
+          // field_info fields[fields_count];
+      for (FieldInfo f : fields) {
+    f.write(dout);
+      }
+          // u2 methods_count;
+      dout.writeShort(methods.size());
+          // method_info methods[methods_count];
+      for (MethodInfo m : methods) {
+    m.write(dout);
+      }
+             // u2 attributes_count;
+      dout.writeShort(0); // (no ClassFile attributes for proxy classes)
+  } catch (IOException e) {
+      throw new InternalError("unexpected I/O Exception");
+  }
+  return bout.toByteArray();
+
+
+
+
+package com.alachao.study.proxy.dynamic;
+
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.Method;
+import java.lang.reflect.Proxy;
+import java.lang.reflect.UndeclaredThrowableException;
+
+public final class ProxySubject extends Proxy
+  implements Subject
+{
+  private static Method m1;
+  private static Method m0;
+  private static Method m3;
+  private static Method m2;
+
+  public ProxySubject(InvocationHandler invocationhandler)
+  {
+    super(invocationhandler);
+  }
+
+  public final boolean equals(Object obj)
+  {
+    try {
+      return ((Boolean)this.h.invoke(this, m1, new Object[] { obj }))
+        .booleanValue();
+    }
+    catch (Throwable throwable) {
+    }
+    throw new UndeclaredThrowableException(throwable);
+  }
+
+  public final int hashCode()
+  {
+    try
+    {
+      return ((Integer)this.h.invoke(this, m0, null)).intValue();
+    }
+    catch (Throwable throwable) {
+    }
+    throw new UndeclaredThrowableException(throwable);
+  }
+
+  public final void doSomething()
+  {
+    try
+    {
+      this.h.invoke(this, m3, null);
+      return;
+    }
+    catch (Throwable throwable) {
+    }
+    throw new UndeclaredThrowableException(throwable);
+  }
+
+  public final String toString()
+  {
+    try
+    {
+      return (String)this.h.invoke(this, m2, null);
+    }
+    catch (Throwable throwable) {
+    }
+    throw new UndeclaredThrowableException(throwable);
+  }
+
+  static
+  {
+    try
+    {
+      m1 = Class.forName("java.lang.Object").getMethod("equals", new Class[] {
+        Class.forName("java.lang.Object") });
+
+      m0 = Class.forName("java.lang.Object").getMethod("hashCode", new Class[0]);
+      m3 = Class.forName("Subject").getMethod("doSomething", new Class[0]);
+      m2 = Class.forName("java.lang.Object").getMethod("toString", new Class[0]);
+    }
+    catch (NoSuchMethodException nosuchmethodexception)
+    {
+      throw new NoSuchMethodError(nosuchmethodexception.getMessage());
+    }
+    catch (ClassNotFoundException classnotfoundexception)
+    {
+      throw new NoClassDefFoundError(classnotfoundexception.getMessage());
+    }
+  }
+}

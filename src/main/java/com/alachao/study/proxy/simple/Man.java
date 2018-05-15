@@ -1,4 +1,4 @@
-package com.alachao.study.proxy;
+package com.alachao.study.proxy.simple;
 
 public interface Man {
     /**

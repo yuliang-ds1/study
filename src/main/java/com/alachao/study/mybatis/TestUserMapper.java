@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class TestUserMapper {
 
     public TestUserMapper(){
-
         System.out.print("init 构造");
     }
 

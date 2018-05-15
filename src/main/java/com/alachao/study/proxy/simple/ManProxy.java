@@ -1,4 +1,4 @@
-package com.alachao.study.proxy;
+package com.alachao.study.proxy.simple;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
