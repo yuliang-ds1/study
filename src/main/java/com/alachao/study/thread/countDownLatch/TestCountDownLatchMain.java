@@ -13,7 +13,7 @@ public class TestCountDownLatchMain {
 
     public static void main(String args[]){
 
-        CountDownLatch countDownLatch=new CountDownLatch(2);
+        CountDownLatch countDownLatch=new CountDownLatch(3);
         try {
             long startTime=System.currentTimeMillis();
             System.out.println("准备起跑~~~");
@@ -21,11 +21,15 @@ public class TestCountDownLatchMain {
             a.start();
             Thread b=new RunThreadB(countDownLatch);
             b.start();
-            Thread.sleep(5000);
-            //等待两个线程执行完毕才会到这里
+            Thread c=new RunThreadC(countDownLatch);
+            c.start();
             countDownLatch.await();
+            System.out.println("准备起跑中await 10s...");
+            Thread.sleep(10000);
+            //等待三个线程执行完毕才会到这里
+
             long endTime=System.currentTimeMillis();
-            System.out.println("起跑了~~~"+(endTime-startTime));
+            System.out.println("起跑需要时间~~~"+(endTime-startTime));
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
