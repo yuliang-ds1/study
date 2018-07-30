@@ -10,16 +10,22 @@ import java.util.concurrent.CountDownLatch;
 public class RunThreadA extends Thread{
 
     private CountDownLatch countDownLatch;
+    private Integer num;
 
-    public RunThreadA(CountDownLatch countDownLatch){
+    public RunThreadA(CountDownLatch countDownLatch,Integer num){
         this.countDownLatch=countDownLatch;
+        this.num=num;
     }
 
     @Override
     public void run(){
-        System.out.println("小马准备起跑~~~");
+        if(num<100){
+            System.out.print(num+",");
+        }else{
+            System.out.print(num);
+        }
         try {
-            Thread.sleep(5000);
+            Thread.sleep(1000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

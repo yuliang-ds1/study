@@ -19,22 +19,28 @@ public class TestCyclicBarrier {
             @Override
             public void run(){
                 //等待其他任务过程中，先执行完的空闲线程，执行此线程任务；
-                System.out.println("当前线程"+Thread.currentThread().getName());
+                System.out.println("当前线程"+Thread.currentThread().getName()+" 当前时间："+System.currentTimeMillis());
             }
         });
-        for(int i=0;i<2;i++){
+       /* for(int i=0;i<2;i++){
            new CyclicBarrierThreadA(cyclicBarrier).start();
-        }
+        }*/
+        new CyclicBarrierThreadA(cyclicBarrier).start();
+        new CyclicBarrierThreadB(cyclicBarrier).start();
+
         try {
-            Thread.sleep(10000);
+            Thread.sleep(15000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
         System.out.println("中餐");
         //第一次重复执行任务
-        for(int i=0;i<2;i++){
+        /*for(int i=0;i<2;i++){
             new CyclicBarrierThreadA(cyclicBarrier).start();
-        }
+        }*/
+        new CyclicBarrierThreadA(cyclicBarrier).start();
+        new CyclicBarrierThreadB(cyclicBarrier).start();
+
         try {
             Thread.sleep(10000);
         } catch (InterruptedException e) {
@@ -87,17 +93,46 @@ class CyclicBarrierThreadA extends  Thread {
 
     @Override
     public void run(){
-        System.out.println("线程"+Thread.currentThread().getName()+"正在写入数据...");
+        System.out.println("线程A"+Thread.currentThread().getName()+"正在写入数据..."+" 当前时间："+System.currentTimeMillis());
         try {
             Thread.sleep(5000);
-            System.out.println("线程"+Thread.currentThread().getName()+"写入数据完毕，等待其他线程写入完毕");
+            System.out.println("线程A"+Thread.currentThread().getName()+"写入数据完毕，等待其他线程写入完毕"+" 当前时间："+System.currentTimeMillis());
             cyclicBarrier.await();
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (BrokenBarrierException e) {
             e.printStackTrace();
         }
-        System.out.println("所有线程写入完毕，继续处理其他任务...");
+        System.out.println("线程A"+Thread.currentThread().getName()+"所有线程写入完毕，继续处理其他任务..."+"当前时间："+System.currentTimeMillis());
+
+    }
+
+
+}
+
+
+
+class CyclicBarrierThreadB extends  Thread {
+
+    private CyclicBarrier cyclicBarrier;
+
+    public CyclicBarrierThreadB(CyclicBarrier cyclicBarrier){
+        this.cyclicBarrier=cyclicBarrier;
+    }
+
+    @Override
+    public void run(){
+        System.out.println("线程B"+Thread.currentThread().getName()+"正在写入数据..."+" 当前时间："+System.currentTimeMillis());
+        try {
+            Thread.sleep(10000);
+            System.out.println("线程B"+Thread.currentThread().getName()+"写入数据完毕，等待其他线程写入完毕"+" 当前时间："+System.currentTimeMillis());
+            cyclicBarrier.await();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (BrokenBarrierException e) {
+            e.printStackTrace();
+        }
+        System.out.println("线程B"+Thread.currentThread().getName()+"所有线程写入完毕，继续处理其他任务..."+"当前时间："+System.currentTimeMillis());
 
     }
 

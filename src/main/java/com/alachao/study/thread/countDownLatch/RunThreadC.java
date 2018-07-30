@@ -13,12 +13,12 @@ public class RunThreadC extends Thread {
 
     @Override
     public  void  run(){
+        System.out.println("砸一下~~~");
         try {
-            Thread.sleep(13000);
+            Thread.sleep(5000);
         }catch(InterruptedException exception){
             exception.printStackTrace();
         }
-        System.out.println("我正在吃C");
         countDownLatch.countDown();
     }
 

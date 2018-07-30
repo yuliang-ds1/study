@@ -11,28 +11,29 @@ import java.util.concurrent.CountDownLatch;
  */
 public class TestCountDownLatchMain {
 
-    public static void main(String args[]){
 
-        CountDownLatch countDownLatch=new CountDownLatch(3);
-        try {
+    public  static  Integer num=0;
+
+    public static void main(String args[]) {
+
+
+        while(num<10){
+            CountDownLatch countDownLatch=new CountDownLatch(2);
             long startTime=System.currentTimeMillis();
-            System.out.println("准备起跑~~~");
-            Thread a=new RunThreadA(countDownLatch);
+            num=num+1;
+            Thread a=new RunThreadA(countDownLatch,num);
             a.start();
-            Thread b=new RunThreadB(countDownLatch);
+            num=num+1;
+            Thread b=new RunThreadB(countDownLatch,num);
             b.start();
-            Thread c=new RunThreadC(countDownLatch);
-            c.start();
-            countDownLatch.await();
-            System.out.println("准备起跑中await 10s...");
-            Thread.sleep(10000);
-            //等待三个线程执行完毕才会到这里
+            try {
+                countDownLatch.await();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
 
-            long endTime=System.currentTimeMillis();
-            System.out.println("起跑需要时间~~~"+(endTime-startTime));
-        } catch (InterruptedException e) {
-            e.printStackTrace();
         }
+
 
     }
 }
