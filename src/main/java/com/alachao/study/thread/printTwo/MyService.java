@@ -22,6 +22,8 @@ public class MyService {
     //全局标识用于交互打印
     Integer index=1;
 
+    Boolean  flag=false;
+
 
     /**
      * 线程1打印奇数
@@ -31,11 +33,12 @@ public class MyService {
         lock.lock();
         try {
             //2.如果当前应该打印偶数，此方法阻塞等待
-            if(index%2==0){
+            if(flag){
                condition.await();
             }
             //3.如果当前应该打印奇数，打印奇数，并唤醒阻塞线程；
             index=index+1;
+            flag=true;
             System.out.print(num);
             condition.signal();
         } catch (InterruptedException e) {
@@ -53,10 +56,11 @@ public class MyService {
     public void  printEvenNumber(int num){
         lock.lock();
         try {
-            if(index%2==1){
+            if(!flag){
                 condition.await();
             }
             index=index+1;
+            flag=false;
             System.out.print(num);
             condition.signal();
         } catch (InterruptedException e) {
