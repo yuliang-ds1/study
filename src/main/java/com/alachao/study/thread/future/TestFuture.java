@@ -37,6 +37,8 @@ public class TestFuture {
                 e.printStackTrace();
             }
         }
+
+
         int result = 0;
         try {
             // 4. 调用get()方法获取任务结果,如果任务没有执行完成则阻塞等待
