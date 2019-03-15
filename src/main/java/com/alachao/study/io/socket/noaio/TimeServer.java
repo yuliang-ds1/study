@@ -18,17 +18,11 @@ import java.util.concurrent.*;
 public class TimeServer {
 
     public  static void main(String args[]){
-
         int port=8080;
-
-        BufferedReader  bufferedReader=null;
-        PrintWriter  printWriter=null;
         ServerSocket socketServer=null;
         java.net.Socket socket=null;
-
         try {
             socketServer=new ServerSocket(port);
-
             TimeServerHandlerThreadPool timeServerHandler=new TimeServerHandlerThreadPool(5,1);
 
             while(true){
