@@ -20,6 +20,9 @@ public class RunThreadC extends Thread {
             exception.printStackTrace();
         }
         countDownLatch.countDown();
+
+        System.out.print("threadName: +"+Thread.currentThread().getName()+"  going ");
+
     }
 
 

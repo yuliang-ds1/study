@@ -28,6 +28,7 @@ public class TestCountDownLatchMain {
             b.start();
             try {
                 countDownLatch.await();
+                System.out.println("threadName: +"+Thread.currentThread().getName()+"  going ");
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

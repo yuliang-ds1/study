@@ -20,16 +20,19 @@ public class RunThreadA extends Thread{
     @Override
     public void run(){
         if(num<100){
-            System.out.print(num+",");
+            System.out.println("threadName: +"+Thread.currentThread().getName()+"   "+num+",");
         }else{
             System.out.print(num);
         }
-        try {
+       /* try {
             Thread.sleep(1000);
         } catch (InterruptedException e) {
             e.printStackTrace();
-        }
+        }*/
         countDownLatch.countDown();
+
+        System.out.println("threadName: +"+Thread.currentThread().getName()+"  going ");
+
     }
 
 
