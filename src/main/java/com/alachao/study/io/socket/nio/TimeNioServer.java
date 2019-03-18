@@ -8,7 +8,7 @@ import java.util.concurrent.ThreadPoolExecutor;
  * @Date 2019/3/15 15:00
  * @Description
  */
-public class TimeServer {
+public class TimeNioServer {
 
     public static  void main(String  args[]){
 

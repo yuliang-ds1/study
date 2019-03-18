@@ -15,7 +15,7 @@ import java.util.concurrent.*;
  * @Date 2019/3/15 11:00
  * @Description
  */
-public class TimeServer {
+public class TimeNoBioServer {
 
     public  static void main(String args[]){
         int port=8080;

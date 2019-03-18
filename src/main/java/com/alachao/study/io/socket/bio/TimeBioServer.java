@@ -9,7 +9,7 @@ import java.net.Socket;
  * @Date 2019/3/14 20:48
  * @Description
  */
-public class TimeServer {
+public class TimeBioServer {
 
 
     public  static  void  main(String args[]) throws IOException {
