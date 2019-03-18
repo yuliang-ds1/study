@@ -1,6 +1,5 @@
 package com.alachao.study.io.socket.noaio;
 
-import io.netty.channel.unix.Socket;
 
 import java.io.BufferedReader;
 import java.io.IOException;

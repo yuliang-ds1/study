@@ -179,7 +179,6 @@ public class MultiplexerTimeServer implements  Runnable {
             //异步非阻塞，并不能保证一次把需要发送的字节数组发送完，会出现写半包的问题，需要注册写操作
             //不断轮询Selector将没有发送完的ByteBuffer发送完毕，然后可以通过ByteBuffer的hasRemain()
             //方法判断小时是否发送完成
-
             socketChannel.write(writeBuffer);
         }
 
