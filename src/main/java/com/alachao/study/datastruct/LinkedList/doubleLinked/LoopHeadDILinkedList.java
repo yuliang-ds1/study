@@ -1,6 +1,7 @@
-package com.zejian.structures.LinkedList.doubleLinked;
+package com.alachao.study.datastruct.LinkedList.doubleLinked;
 
-import com.zejian.structures.LinkedList.ILinkedList;
+
+import com.alachao.study.datastruct.LinkedList.ILinkedList;
 
 /**
  * Created by zejian on 2016/10/24.

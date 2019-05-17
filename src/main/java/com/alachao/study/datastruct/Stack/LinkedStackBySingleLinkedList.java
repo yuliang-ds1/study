@@ -1,6 +1,7 @@
-package com.zejian.structures.Stack;
+package com.alachao.study.datastruct.Stack;
 
-import com.zejian.structures.LinkedList.singleLinked.SingleILinkedList;
+
+import com.alachao.study.datastruct.LinkedList.singleLinked.SingleILinkedList;
 
 import java.io.Serializable;
 

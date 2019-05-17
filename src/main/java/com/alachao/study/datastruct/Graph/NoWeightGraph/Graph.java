@@ -1,4 +1,4 @@
-package com.zejian.structures.Graph.NoWeightGraph;
+package com.alachao.study.datastruct.Graph.NoWeightGraph;
 
 import java.io.BufferedInputStream;
 import java.io.File;

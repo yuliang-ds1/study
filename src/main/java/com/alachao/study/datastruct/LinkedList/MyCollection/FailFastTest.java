@@ -1,4 +1,4 @@
-package com.zejian.structures.LinkedList.MyCollection;
+package com.alachao.study.datastruct.LinkedList.MyCollection;
 
 import java.util.ArrayList;
 import java.util.Iterator;

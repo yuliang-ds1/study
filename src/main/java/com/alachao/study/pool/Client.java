@@ -10,8 +10,20 @@ public class Client {
      * @param args
      */
     public static void main(String[] args) {
-        DruidDao druidDao = new DruidDao();
-        String sql = "insert into test (name) values(\"keven\")";
-        druidDao.insert(sql);
+
+        for(int i =0;i<10;i++){
+            new Thread(
+            ){
+                @Override
+                public void run() {
+                    DruidDao druidDao = new DruidDao();
+                    String sql = "insert into test (name) values(\"keven\")";
+                    druidDao.insert(sql);
+                }
+            }.start();
+
+
+        }
+
     }
 }

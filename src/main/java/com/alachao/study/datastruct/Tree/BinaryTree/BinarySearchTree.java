@@ -1,7 +1,8 @@
-package com.zejian.structures.Tree.BinaryTree;
+package com.alachao.study.datastruct.Tree.BinaryTree;
 
-import com.zejian.structures.Queue.LinkedQueue;
-import com.zejian.structures.Stack.LinkedStack;
+
+import com.alachao.study.datastruct.Queue.LinkedQueue;
+import com.alachao.study.datastruct.Stack.LinkedStack;
 
 import java.util.Iterator;
 import java.util.LinkedList;

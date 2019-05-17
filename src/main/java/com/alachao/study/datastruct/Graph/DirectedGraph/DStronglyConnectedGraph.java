@@ -1,4 +1,4 @@
-package com.zejian.structures.Graph.DirectedGraph;
+package com.alachao.study.datastruct.Graph.DirectedGraph;
 
 /**
  * Created by zejian on 2018/1/27.

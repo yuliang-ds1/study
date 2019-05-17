@@ -1,4 +1,4 @@
-package com.zejian.structures.Sort;
+package com.alachao.study.datastruct.Sort;
 
 import java.lang.reflect.Method;
 

@@ -1,6 +1,7 @@
-package com.zejian.structures.Queue;
+package com.alachao.study.datastruct.Queue;
 
-import com.zejian.structures.LinkedList.MyCollection.SortMyLinkedList;
+
+import com.alachao.study.datastruct.LinkedList.MyCollection.SortMyLinkedList;
 
 import java.io.Serializable;
 import java.util.NoSuchElementException;

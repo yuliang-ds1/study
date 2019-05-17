@@ -1,4 +1,4 @@
-package com.zejian.structures.Sort.Sort_N_2;
+package com.alachao.study.datastruct.Sort.Sort_N_2;
 
 /**
  * Created by zejian on 2018/2/12.

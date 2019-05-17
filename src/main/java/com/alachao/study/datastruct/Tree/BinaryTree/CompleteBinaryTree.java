@@ -1,6 +1,7 @@
-package com.zejian.structures.Tree.BinaryTree;
+package com.alachao.study.datastruct.Tree.BinaryTree;
 
-import com.zejian.structures.Queue.LinkedQueue;
+
+import com.alachao.study.datastruct.Queue.LinkedQueue;
 
 /**
  * Created by zejian on 2016/12/17.
@@ -41,7 +42,7 @@ public class CompleteBinaryTree<T extends Comparable> extends BinarySearchTree <
         BinaryNode<T> p = null;
 
         if (i<levelOrderArray.length){//递归结束条件
-            p=new BinaryNode<>(levelOrderArray[i],null,null);
+            p=new BinaryNode<T>(levelOrderArray[i],null,null);
             p.left=create(levelOrderArray,2*i+1);  //根据完全二叉树的性质 2*i+1 为左孩子结点
             p.right=create(levelOrderArray,2*i+2); //2*i+2 为右孩子结点
         }
@@ -118,7 +119,7 @@ public class CompleteBinaryTree<T extends Comparable> extends BinarySearchTree <
     {
 
         String[] levelorderArray = {"A","B","C","D","E","F"};
-        CompleteBinaryTree<String> cbtree = new CompleteBinaryTree<>(levelorderArray);
+        CompleteBinaryTree<String> cbtree = new CompleteBinaryTree<String>(levelorderArray);
         System.out.println("先根遍历:"+cbtree.preOrder());
         System.out.println("非递归先根遍历:"+cbtree.preOrderTraverse());
         System.out.println("中根遍历:"+cbtree.inOrder());

@@ -1,4 +1,4 @@
-package com.zejian.structures.LinkedList;
+package com.alachao.study.datastruct.LinkedList;
 
 /**
  * Created by zejian on 2016/10/30.

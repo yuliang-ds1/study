@@ -1,6 +1,7 @@
-package com.zejian.structures.Stack;
+package com.alachao.study.datastruct.Stack;
 
-import com.zejian.structures.LinkedList.MyCollection.MyArrayList;
+
+import com.alachao.study.datastruct.LinkedList.MyCollection.MyArrayList;
 
 import java.io.Serializable;
 

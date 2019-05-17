@@ -1,6 +1,7 @@
-package com.zejian.structures.Graph.WeightGraph;
+package com.alachao.study.datastruct.Graph.WeightGraph;
 
-import com.zejian.structures.heap.MinHeap;
+
+import com.alachao.study.datastruct.heap.MinHeap;
 
 import java.util.ArrayList;
 import java.util.List;

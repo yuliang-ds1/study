@@ -7,6 +7,8 @@ import io.netty.channel.nio.NioEventLoop;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
+import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
+import io.netty.handler.codec.LengthFieldPrepender;
 import io.netty.handler.codec.LineBasedFrameDecoder;
 import io.netty.handler.codec.string.StringDecoder;
 
@@ -20,8 +22,8 @@ public class TimeNettyServer {
     //配置服务端的NIO线程组
     public void bind(int port)throws  Exception{
 
-        EventLoopGroup bossGroup=new NioEventLoopGroup();
-        EventLoopGroup workerGroup=new NioEventLoopGroup();
+        EventLoopGroup bossGroup=new NioEventLoopGroup(1);
+        EventLoopGroup workerGroup=new NioEventLoopGroup(2);
         try {
             ServerBootstrap b = new ServerBootstrap();
             b.group(bossGroup, workerGroup).
@@ -50,8 +52,12 @@ public class TimeNettyServer {
 
         @Override
         protected void initChannel(SocketChannel socketChannel) throws Exception {
-            socketChannel.pipeline().addLast(new LineBasedFrameDecoder(1024));
-            socketChannel.pipeline().addLast(new StringDecoder());
+           // socketChannel.pipeline().addLast(new LineBasedFrameDecoder(1024));
+           // socketChannel.pipeline().addLast(new StringDecoder());
+            socketChannel.pipeline().addLast("frameDecoder",new LengthFieldBasedFrameDecoder(63255,0,2,0,2));
+            socketChannel.pipeline().addLast("msgpack decoder",new MsgpackDecoder());
+            socketChannel.pipeline().addLast("frameEncoder",new LengthFieldPrepender(2));
+            socketChannel.pipeline().addLast("msgpack encoder",new MsgpackEncoder());
             socketChannel.pipeline().addLast(new TimeNettyServerHandler());
         }
     }

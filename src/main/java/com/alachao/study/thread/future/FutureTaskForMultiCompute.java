@@ -21,6 +21,7 @@ public class FutureTaskForMultiCompute {
         List<FutureTask<Integer>> list=new ArrayList<FutureTask<Integer>>();
 
         ExecutorService executorService= Executors.newFixedThreadPool(5);
+        executorService=new ThreadPoolExecutor(5,5,5l,TimeUnit.SECONDS,new ArrayBlockingQueue<Runnable>(1024),new ThreadPoolExecutor.AbortPolicy());
 
         FutureTaskForMultiCompute  futureTaskForMultiCompute=new FutureTaskForMultiCompute();
 

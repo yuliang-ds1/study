@@ -1,4 +1,4 @@
-package com.zejian.structures.Graph.WeightGraph;
+package com.alachao.study.datastruct.Graph.WeightGraph;
 
 public class TestMainForPrim {
 

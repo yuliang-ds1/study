@@ -1,4 +1,4 @@
-package com.zejian.structures.Stack;
+package com.alachao.study.datastruct.Stack;
 
 import java.io.Serializable;
 

@@ -1,6 +1,7 @@
-package com.zejian.structures.Graph.DirectedGraph;
+package com.alachao.study.datastruct.Graph.DirectedGraph;
 
-import com.zejian.structures.Graph.NoWeightGraph.Graph;
+
+import com.alachao.study.datastruct.Graph.NoWeightGraph.Graph;
 
 import java.util.Stack;
 

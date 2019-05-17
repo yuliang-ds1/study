@@ -1,17 +1,15 @@
-package com.zejian.structures.Tree.AVLTree;
+package com.alachao.study.datastruct.Tree.AVLTree;
 
 
-import com.zejian.structures.Tree.BinaryTree.BinaryNode;
-import com.zejian.structures.Tree.BinaryTree.BinarySearchTree;
-import com.zejian.structures.Tree.BinaryTree.Tree;
-
+import com.alachao.study.datastruct.Tree.BinaryTree.BinaryNode;
+import com.alachao.study.datastruct.Tree.BinaryTree.Tree;
 
 /**
  * Created by zejian on 2016/12/25.
  * Blog : http://blog.csdn.net/javazejian [原文地址,请尊重原创]
  * 平衡二叉搜索树(AVL树)
  */
-public class AVLTree<T extends Comparable> implements Tree<T>{
+public class AVLTree<T extends Comparable> implements Tree<T> {
 
 
     /** The tree root. */

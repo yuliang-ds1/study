@@ -1,4 +1,4 @@
-package com.alachao.study.datastruct;
+package com.alachao.study.datastruct.commonTree;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,8 +13,8 @@ public class BinTree {
 
     private BinTree leftChild;//左孩子
     private BinTree rightChild;//右孩子
-    private BinTree root;//根节点
     private Object data; //数据域
+    private BinTree root;//根节点
     private List<BinTree> datas;//存储所有的节点
     public BinTree(BinTree lChild, BinTree rChild, Object data) {
         super();

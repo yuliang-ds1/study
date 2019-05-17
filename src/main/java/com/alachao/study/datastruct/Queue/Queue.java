@@ -1,4 +1,4 @@
-package com.zejian.structures.Queue;
+package com.alachao.study.datastruct.Queue;
 
 /**
  * Created by zejian on 2016/11/28.

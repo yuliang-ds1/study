@@ -1,6 +1,7 @@
-package com.zejian.structures.Sort.Sort_NLogN;
+package com.alachao.study.datastruct.Sort.Sort_NLogN;
 
-import com.zejian.structures.Sort.Sort_N_2.InsertionSort;
+
+import com.alachao.study.datastruct.Sort.Sort_N_2.InsertionSort;
 
 /**
  * Created by zejian on 2018/2/13.

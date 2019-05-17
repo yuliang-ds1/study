@@ -1,4 +1,4 @@
-package com.zejian.structures.LinkedList.doubleLinked;
+package com.alachao.study.datastruct.LinkedList.doubleLinked;
 
 /**
  * Created by zejian on 2016/11/6.

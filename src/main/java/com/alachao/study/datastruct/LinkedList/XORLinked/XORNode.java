@@ -1,4 +1,4 @@
-package com.zejian.structures.LinkedList.XORLinked;
+package com.alachao.study.datastruct.LinkedList.XORLinked;
 
 /**
  * Created by zejian on 2016/11/6.

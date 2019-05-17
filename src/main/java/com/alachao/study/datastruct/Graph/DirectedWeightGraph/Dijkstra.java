@@ -1,9 +1,9 @@
-package com.zejian.structures.Graph.DirectedWeightGraph;
+package com.alachao.study.datastruct.Graph.DirectedWeightGraph;
 
-import com.zejian.structures.Graph.WeightGraph.Edge;
-import com.zejian.structures.Graph.WeightGraph.WeightGraph;
-import com.zejian.structures.Graph.WeightGraph.WeightSparseGraph;
-import com.zejian.structures.heap.IndexMinPQ;
+import com.alachao.study.datastruct.Graph.WeightGraph.Edge;
+import com.alachao.study.datastruct.Graph.WeightGraph.WeightGraph;
+import com.alachao.study.datastruct.Graph.WeightGraph.WeightSparseGraph;
+import com.alachao.study.datastruct.heap.IndexMinPQ;
 
 import java.util.ArrayList;
 import java.util.List;

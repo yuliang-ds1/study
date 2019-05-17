@@ -1,4 +1,4 @@
-package com.zejian.structures.Graph.WeightGraph;
+package com.alachao.study.datastruct.Graph.WeightGraph;
 
 import java.io.BufferedInputStream;
 import java.io.File;

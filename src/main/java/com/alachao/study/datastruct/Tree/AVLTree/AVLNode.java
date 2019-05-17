@@ -1,4 +1,4 @@
-package com.zejian.structures.Tree.AVLTree;
+package com.alachao.study.datastruct.Tree.AVLTree;
 
 /**
  * Created by zejian on 2016/12/25.

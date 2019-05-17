@@ -25,16 +25,23 @@ public class TimeNettyServerHandler  extends ChannelHandlerAdapter {
 
         //String body=new String(req,"UTF-8").substring(0,req.length
         //        -System.getProperty("line.separator").length());
+        Object  s=msg;
+        if(s.equals("2")){
 
-        String body=(String)msg;
-        System.out.println("The Time Server Receive Order: "+body
-        +"  ; the counter is : "+ ++counter);
+            System.out.println("Server-channelRead:"+s);
 
-        String currentTime="QUERY TTIME ORDER".equalsIgnoreCase(body)?new Date(System.currentTimeMillis()).toString():"BAD ORDER";
-        currentTime=currentTime+System.getProperty("line.separator");
-        ByteBuf  resp= Unpooled.copiedBuffer(currentTime.getBytes());
 
-        ctx.writeAndFlush(resp);
+        }
+        System.out.println("Server-channelRead:"+msg);
+
+        //String body=(String)msg;
+        //System.out.println("The Time Server Receive Order: "+body +"  ; the counter is : "+ ++counter);
+        //String currentTime="QUERY TTIME ORDER".equalsIgnoreCase(body)?new Date(System.currentTimeMillis()).toString():"BAD ORDER";
+        //currentTime=currentTime+System.getProperty("line.separator");
+        //ByteBuf  resp= Unpooled.copiedBuffer(currentTime.getBytes());
+
+        ctx.writeAndFlush(msg);
+        //ctx.writeAndFlush(resp);
 
     }
 

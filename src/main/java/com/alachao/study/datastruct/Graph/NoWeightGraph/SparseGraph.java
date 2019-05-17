@@ -1,6 +1,7 @@
-package com.zejian.structures.Graph.NoWeightGraph;
+package com.alachao.study.datastruct.Graph.NoWeightGraph;
 
-import com.zejian.structures.LinkedList.MyCollection.MylinkeList;
+
+import com.alachao.study.datastruct.LinkedList.MyCollection.MylinkeList;
 
 /**
  * Created by zejian on 2018/1/20.

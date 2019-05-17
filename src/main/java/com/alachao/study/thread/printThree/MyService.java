@@ -17,8 +17,7 @@ public class MyService {
     public MyService(){}
     //重入锁
     //消息路由
-    //全局标识用于交互打印
-    Integer index=1;
+    private volatile  boolean flag=true;
 
     /**
      * 线程1打印奇数
@@ -26,17 +25,16 @@ public class MyService {
     synchronized public void printOddNumber(int num){
         //1.锁定资源
         //2.如果当前应该打印偶数，此方法阻塞等待
-        if(index%2==0){
+        if(!flag){
             try {
                 this.wait();
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
-        //3.如果当前应该打印奇数，打印奇数，并唤醒阻塞线程；
-        index=index+1;
         System.out.print(num);
         System.out.print(",");
+        flag=false;
         this.notifyAll();
 
     }
@@ -45,16 +43,16 @@ public class MyService {
      * 线程2打印偶数
      */
     synchronized public void  printEvenNumber(int num){
-        if(index%2==1){
+        if(flag){
             try {
                 this.wait();
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
-        index=index+1;
         System.out.print(num);
         System.out.print(",");
+        flag=true;
         this.notifyAll();
     }
 

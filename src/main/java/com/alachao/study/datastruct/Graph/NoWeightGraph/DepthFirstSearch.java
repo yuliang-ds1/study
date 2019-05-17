@@ -1,4 +1,4 @@
-package com.zejian.structures.Graph.NoWeightGraph;
+package com.alachao.study.datastruct.Graph.NoWeightGraph;
 
 /**
  * Created by zejian on 2018/1/21.

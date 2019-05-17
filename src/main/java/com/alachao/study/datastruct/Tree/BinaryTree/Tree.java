@@ -1,4 +1,4 @@
-package com.zejian.structures.Tree.BinaryTree;
+package com.alachao.study.datastruct.Tree.BinaryTree;
 
 /**
  * Created by zejian on 2016/12/14.

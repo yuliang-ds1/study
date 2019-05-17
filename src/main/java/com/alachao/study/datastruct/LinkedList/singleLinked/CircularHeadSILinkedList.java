@@ -1,7 +1,7 @@
-package com.zejian.structures.LinkedList.singleLinked;
+package com.alachao.study.datastruct.LinkedList.singleLinked;
 
-import com.zejian.structures.LinkedList.ILinkedList;
 
+import com.alachao.study.datastruct.LinkedList.ILinkedList;
 
 /**
  * Created by zejian on 2016/10/25.

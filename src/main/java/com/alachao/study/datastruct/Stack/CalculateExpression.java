@@ -1,4 +1,4 @@
-package com.zejian.structures.Stack;
+package com.alachao.study.datastruct.Stack;
 
 /**
  * Created by zejian on 2016/11/28.

@@ -29,9 +29,9 @@ public class TimeNettyClient {
         try {
             Bootstrap b = new Bootstrap();
             b.group(eventLoopGroup)
-            .channel(NioSocketChannel.class)
-            .option(ChannelOption.SO_BACKLOG.TCP_NODELAY,true)
-            .handler(new ChannelInitializer<SocketChannel>() {
+             .channel(NioSocketChannel.class)
+             .option(ChannelOption.SO_BACKLOG.TCP_NODELAY,true)
+             .handler(new ChannelInitializer<SocketChannel>() {
                 @Override
                 protected void initChannel(SocketChannel socketChannel) throws Exception {
                     socketChannel.pipeline().addLast(new LineBasedFrameDecoder(1024));

@@ -1,6 +1,7 @@
-package com.zejian.structures.Sort.Sort_NLogN;
+package com.alachao.study.datastruct.Sort.Sort_NLogN;
 
-import com.zejian.structures.Sort.SortTestHelper;
+
+import com.alachao.study.datastruct.Sort.SortTestHelper;
 
 import java.util.Arrays;
 

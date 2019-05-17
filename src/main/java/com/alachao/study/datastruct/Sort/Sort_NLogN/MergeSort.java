@@ -1,7 +1,8 @@
-package com.zejian.structures.Sort.Sort_NLogN;
+package com.alachao.study.datastruct.Sort.Sort_NLogN;
 
-import com.zejian.structures.Sort.SortTestHelper;
-import com.zejian.structures.Sort.Sort_N_2.InsertionSort;
+
+import com.alachao.study.datastruct.Sort.SortTestHelper;
+import com.alachao.study.datastruct.Sort.Sort_N_2.InsertionSort;
 
 import java.lang.reflect.Array;
 import java.util.Arrays;

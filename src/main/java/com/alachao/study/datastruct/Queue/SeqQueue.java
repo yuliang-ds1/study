@@ -1,4 +1,4 @@
-package com.zejian.structures.Queue;
+package com.alachao.study.datastruct.Queue;
 
 import java.io.Serializable;
 import java.util.NoSuchElementException;
